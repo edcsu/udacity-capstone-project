@@ -21,7 +21,7 @@ export async function getTweets(userId: string): Promise<Tweet[]> {
   return await tweetsAccess.getTweetItems(userId)
 }
 
-export async function createTweet(userId: string, createTodoRequest: CreateTweetRequest): Promise<Tweet> {
+export async function createTweet(userId: string, createTweetRequest: CreateTweetRequest): Promise<Tweet> {
   const tweetId = uuid.v4()
 
   const newItem: Tweet = {
@@ -29,7 +29,7 @@ export async function createTweet(userId: string, createTodoRequest: CreateTweet
     tweetId,
     createdAt: new Date().toISOString(),
     attachmentUrl: `https://${tweetsStorage.getBucketName()}.s3.amazonaws.com/${tweetId}`,
-    ...createTodoRequest
+    ...createTweetRequest
   }
 
   logger.info(`Creating tweet ${tweetId} for user ${userId}`, { userId, tweetId, Tweet: newItem })
@@ -39,8 +39,8 @@ export async function createTweet(userId: string, createTodoRequest: CreateTweet
   return newItem
 }
 
-export async function updateTweet(userId: string, tweetId: string, updateTodoRequest: UpdateTweetRequest) {
-  logger.info(`Updating tweet ${tweetId} for user ${userId}`, { userId, tweetId, TweetUpdate: updateTodoRequest })
+export async function updateTweet(userId: string, tweetId: string, updateTweetRequest: UpdateTweetRequest) {
+  logger.info(`Updating tweet ${tweetId} for user ${userId}`, { userId, tweetId, TweetUpdate: updateTweetRequest })
 
   const item = await tweetsAccess.getTweetItem(tweetId, userId)
 
@@ -52,7 +52,7 @@ export async function updateTweet(userId: string, tweetId: string, updateTodoReq
     createError(401, 'User is not authorized to update tweet')
   }
 
-  tweetsAccess.updateTweetItem(tweetId, userId, updateTodoRequest as TweetUpdate)
+  tweetsAccess.updateTweetItem(tweetId, userId, updateTweetRequest as TweetUpdate)
 }
 
 export async function deleteTweet(userId: string, tweetId: string) {

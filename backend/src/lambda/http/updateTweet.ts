@@ -18,9 +18,9 @@ export const handler = middy(
 
     const userId = getUserId(event)
     const tweetId = event.pathParameters.tweetId
-    const updatedTodo: UpdateTweetRequest = JSON.parse(event.body)
+    const updatedTweet: UpdateTweetRequest = JSON.parse(event.body)
 
-    await updateTweet(userId, tweetId, updatedTodo)
+    await updateTweet(userId, tweetId, updatedTweet)
 
     logger.info(`Tweet updated succesfully with id: ${tweetId}.`)
 

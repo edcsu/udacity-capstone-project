@@ -16,7 +16,7 @@ export const handler = middy(
     
     logger.info('Processing generateUploadUrl event', { event })
     
-    const attachmentId = event.pathParameters.todoId
+    const attachmentId = event.pathParameters.tweetId
 
     const uploadUrl = await generateUploadUrl(attachmentId)
 

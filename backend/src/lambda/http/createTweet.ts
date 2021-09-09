@@ -16,9 +16,9 @@ export const handler = middy(
       
     // Create a new Tweet item
     const userId = getUserId(event)
-    const newTodo: CreateTweetRequest = JSON.parse(event.body)
+    const newTweet: CreateTweetRequest = JSON.parse(event.body)
 
-    const newItem = await createTweet(userId, newTodo)
+    const newItem = await createTweet(userId, newTweet)
 
     logger.info(`A new tweet was created.`)
     

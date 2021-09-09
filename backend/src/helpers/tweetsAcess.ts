@@ -6,13 +6,13 @@ import { TweetUpdate } from '../models/TweetUpdate';
 
 const logger = createLogger('TweetsAccess')
 
-// TODO: Implement the dataLayer logic
+// DataLayer logic
 export class TweetsAccess {
 
     constructor(
       private readonly docClient: DocumentClient = new AWS.DynamoDB.DocumentClient(),
       private readonly tweetsTable = process.env.TWEETS_TABLE,
-      private readonly todosByUserIndex = process.env.TODOS_BY_USER_INDEX
+      private readonly tweetsByUserIndex = process.env.TWEETS_INDEX
     ) {}
   
     async tweetItemExists(tweetId: string, userId: string): Promise<boolean> {
@@ -25,7 +25,7 @@ export class TweetsAccess {
   
       const result = await this.docClient.query({
         TableName: this.tweetsTable,
-        IndexName: this.todosByUserIndex,
+        IndexName: this.tweetsByUserIndex,
         KeyConditionExpression: 'userId = :userId',
         ExpressionAttributeValues: {
           ':userId': userId
