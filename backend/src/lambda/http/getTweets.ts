@@ -4,22 +4,22 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
 
-import { getTodos } from '../../helpers/todos'
+import { getTweets } from '../../helpers/tweets'
 import { getUserId } from '../utils';
 
 import { createLogger } from '../../utils/logger'
 
-const logger = createLogger('getTodos')
+const logger = createLogger('getTweets')
 
-// TODO: Get all TODO items for a current user
+// TODO: Get all tweets items for a current user
 export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     // Write your code here
-    logger.info('Processing getTodos event', { event })
+    logger.info('Processing getTweets event', { event })
     
     const userId = getUserId(event)
 
-    const todos = await getTodos(userId)
+    const tweets = await getTweets(userId)
 
     return {
       statusCode: 200,
@@ -27,7 +27,7 @@ export const handler = middy(
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true},
       body: JSON.stringify({
-        items: todos
+        items: tweets
       })
     }
   }

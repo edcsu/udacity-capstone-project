@@ -3,20 +3,12 @@
   "title": "group",
   "type": "object",
   "properties": {
-    "name": {
+    "thought": {
       "type": "string"
-    },
-    "dueDate": {
-      "type": "string"
-    },
-    "done": {
-      "type": "boolean"
     }
   },
   "required": [
-    "name",
-    "dueDate",
-    "done"
+    "thought"
   ],
   "additionalProperties": false
 }

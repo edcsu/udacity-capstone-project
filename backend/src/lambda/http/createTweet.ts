@@ -4,23 +4,23 @@ import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
 import { CreateTodoRequest } from '../../requests/CreateTodoRequest'
 import { getUserId } from '../utils';
-import { createTodo } from '../../helpers/todos'
+import { createTweet } from '../../helpers/tweets'
 import { createLogger } from '../../utils/logger'
 
-const logger = createLogger('createTodo')
+const logger = createLogger('createTweet')
 
 export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     
-    logger.info('Processing createTodo event', { event })
+    logger.info('Processing createTweet event', { event })
       
-    // TODO: Implement creating a new TODO item
+    // TODO: Implement creating a new Tweet item
     const userId = getUserId(event)
     const newTodo: CreateTodoRequest = JSON.parse(event.body)
 
-    const newItem = await createTodo(userId, newTodo)
+    const newItem = await createTweet(userId, newTodo)
 
-    logger.info(`A new todo created with name: ${newTodo.name}`)
+    logger.info(`A new tweet was created.`)
     
     return {
       statusCode: 201,

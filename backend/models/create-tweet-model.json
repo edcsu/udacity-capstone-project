@@ -3,16 +3,12 @@
   "title": "group",
   "type": "object",
   "properties": {
-    "name": {
-      "type": "string"
-    },
-    "dueDate": {
+    "thought": {
       "type": "string"
     }
   },
   "required": [
-    "name",
-    "dueDate"
+    "thought"
   ],
   "additionalProperties": false
 }
