@@ -1,7 +1,6 @@
-# TODO: Change the name of the org 
 org: skelevel
-app: serverless-todo-app
-service: serverless-todo-app
+app: serverless-tweet-app
+service: serverless-tweet-app
 
 plugins:
   - serverless-webpack
@@ -20,12 +19,10 @@ provider:
     lambda: true
     apiGateway: true
 
-  # Use these variables in the functions and resouorces section below. For example, 
-  # ${self:provider.environment.ATTACHMENT_S3_BUCKET}
   environment:
-    TWEETS_TABLE: Todos-${self:provider.stage}
+    TWEETS_TABLE: Tweets-${self:provider.stage}
     TWEETS_CREATED_AT_INDEX: tweets-index-${self:provider.environment.TWEETS_TABLE}
-    ATTACHMENT_S3_BUCKET: serverless-c4-todo-images-${self:provider.stage}-capstone256keith
+    ATTACHMENT_S3_BUCKET: serverless-c4-tweet-images-${self:provider.stage}-capstone256keith
     SIGNED_URL_EXPIRATION: 300
   #  AUTH_0_JWKS_URL: 
 
@@ -56,9 +53,7 @@ functions:
         Resource:
           - '*'
 
-  # TODO: Configure this function - 
-  # Provide iamRoleStatements property for performing Actions on DynamoDB
-  GetTodos:
+  GetTweets:
     handler: src/lambda/http/getTweets.handler
     events:
       - http:
@@ -84,11 +79,7 @@ functions:
         Resource:
           - '*'
 
-  # TODO: Configure this function - 
-  # Provide iamRoleStatements property. Decide the Actions and AWS Resource. 
-  # To refer to an AWS resource defined in the "Resources" section, you can use "Resource: !GetAtt <resource-name>.Arn"
-  # To validate incoming HTTP requests, we have provided the request schemas in function definition below. 
-  CreateTodo:
+  CreateTweet:
     handler: src/lambda/http/createTweet.handler
     events:
       - http:
@@ -110,9 +101,7 @@ functions:
         Resource:
           - '*'
 
-  # TODO: Configure this function
-  # Provide property for setting up CORS, Authorizer, iamRoleStatements, and request schemas
-  UpdateTodo:
+  UpdateTweet:
     handler: src/lambda/http/updateTweet.handler
     events:
       - http:
@@ -135,9 +124,7 @@ functions:
         Resource:
           - '*'
 
-  # TODO: Configure this function
-  # Provide property for setting up CORS, Authorizer, iamRoleStatements
-  DeleteTodo:
+  DeleteTweet:
     handler: src/lambda/http/deleteTweet.handler
     events:
       - http:
@@ -159,8 +146,6 @@ functions:
         Resource:
           - '*'
 
-  # TODO: Configure this function
-  # Provide property for setting up CORS, Authorizer, iamRoleStatements
   GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler
     events:
@@ -185,9 +170,6 @@ functions:
 
 resources:
   Resources:
-    # Add necessary AWS resources. You will need at least the following AWS resources
-    # TODO: Fill the properties
-    # Feel free to change the names as you like. 
     GatewayResponseDefault4XX:
       Type: AWS::ApiGateway::GatewayResponse
       Properties:
@@ -208,8 +190,7 @@ resources:
         ValidateRequestBody: true
         ValidateRequestParameters: false
 
-    # TODO: Create a DynamoDB table with local secondary index and a composite key
-    TodosTable:
+    TweetsTable:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
@@ -234,8 +215,6 @@ resources:
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.TWEETS_TABLE}
 
-    # TODO: Complete the bucket properties below. 
-    # Do not forget to add the CorsConfiguration propoerty
     AttachmentsBucket:
       Type: AWS::S3::Bucket
       Properties:
@@ -254,8 +233,7 @@ resources:
                 - HEAD
               MaxAge: 3000
 
-    # TODO: Complete the policy below and attach it to the bucket defined above
-    # For cross referencing the name of the bucket, use "!Ref AttachmentsBucket"
+    # For cross referencing the name of the bucket, I used "!Ref AttachmentsBucket"
     BucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:

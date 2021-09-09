@@ -16,8 +16,6 @@ export const handler = middy(
     
     logger.info('Processing generateUploadUrl event', { event })
     
-    // TODO: Return a presigned URL to upload a file for a TODO item with the provided id
-    
     const attachmentId = event.pathParameters.todoId
 
     const uploadUrl = await generateUploadUrl(attachmentId)

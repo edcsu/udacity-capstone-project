@@ -11,10 +11,9 @@ import { createLogger } from '../../utils/logger'
 
 const logger = createLogger('getTweets')
 
-// TODO: Get all tweets items for a current user
+// Get all tweets items for a current user
 export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    // Write your code here
     logger.info('Processing getTweets event', { event })
     
     const userId = getUserId(event)

@@ -19,7 +19,6 @@ export const handler = middy(
     const userId = getUserId(event)
     const tweetId = event.pathParameters.tweetId
     const updatedTodo: UpdateTweetRequest = JSON.parse(event.body)
-    // TODO: Update a tweet item with the provided id using values in the "updatedTweet" object
 
     await updateTweet(userId, tweetId, updatedTodo)
 

@@ -11,7 +11,7 @@ export class TweetsAccess {
 
     constructor(
       private readonly docClient: DocumentClient = new AWS.DynamoDB.DocumentClient(),
-      private readonly todosTable = process.env.TWEETS_TABLE,
+      private readonly tweetsTable = process.env.TWEETS_TABLE,
       private readonly todosByUserIndex = process.env.TODOS_BY_USER_INDEX
     ) {}
   
@@ -21,10 +21,10 @@ export class TweetsAccess {
     }
   
     async getTweetItems(userId: string): Promise<Tweet[]> {
-      logger.info(`Getting all tweets for user ${userId} from ${this.todosTable}`)
+      logger.info(`Getting all tweets for user ${userId} from ${this.tweetsTable}`)
   
       const result = await this.docClient.query({
-        TableName: this.todosTable,
+        TableName: this.tweetsTable,
         IndexName: this.todosByUserIndex,
         KeyConditionExpression: 'userId = :userId',
         ExpressionAttributeValues: {
@@ -34,16 +34,16 @@ export class TweetsAccess {
   
       const items = result.Items
   
-      logger.info(`Found ${items.length} tweets for user ${userId} in ${this.todosTable}`)
+      logger.info(`Found ${items.length} tweets for user ${userId} in ${this.tweetsTable}`)
   
       return items as Tweet[]
     }
   
     async getTweetItem(tweetId: string, userId: string): Promise<Tweet> {
-      logger.info(`Getting tweet ${tweetId} from ${this.todosTable}`)
+      logger.info(`Getting tweet ${tweetId} from ${this.tweetsTable}`)
   
       const result = await this.docClient.get({
-        TableName: this.todosTable,
+        TableName: this.tweetsTable,
         Key: {
           tweetId,
           userId
@@ -56,19 +56,19 @@ export class TweetsAccess {
     }
   
     async createTweetItem(Tweet: Tweet) {
-      logger.info(`Putting tweet ${Tweet.tweetId} into ${this.todosTable}`)
+      logger.info(`Putting tweet ${Tweet.tweetId} into ${this.tweetsTable}`)
   
       await this.docClient.put({
-        TableName: this.todosTable,
+        TableName: this.tweetsTable,
         Item: Tweet,
       }).promise()
     }
   
     async updateTweetItem(tweetId: string, userId: string, TweetUpdate: TweetUpdate) {
-      logger.info(`Updating tweet item ${tweetId} in ${this.todosTable}`)
+      logger.info(`Updating tweet item ${tweetId} in ${this.tweetsTable}`)
   
       await this.docClient.update({
-        TableName: this.todosTable,
+        TableName: this.tweetsTable,
         Key: {
           tweetId,
           userId
@@ -84,10 +84,10 @@ export class TweetsAccess {
     }
   
     async deleteTweetItem(tweetId: string, userId: string) {
-      logger.info(`Deleting tweet item ${tweetId} from ${this.todosTable}`)
+      logger.info(`Deleting tweet item ${tweetId} from ${this.tweetsTable}`)
   
       await this.docClient.delete({
-        TableName: this.todosTable,
+        TableName: this.tweetsTable,
         Key: {
           tweetId,
           userId
@@ -96,10 +96,10 @@ export class TweetsAccess {
     }
   
     async updateAttachmentUrl(tweetId: string, attachmentUrl: string) {
-      logger.info(`Updating attachment URL for tweet ${tweetId} in ${this.todosTable}`)
+      logger.info(`Updating attachment URL for tweet ${tweetId} in ${this.tweetsTable}`)
   
       await this.docClient.update({
-        TableName: this.todosTable,
+        TableName: this.tweetsTable,
         Key: {
           tweetId,
           // userId

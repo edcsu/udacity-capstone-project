@@ -16,7 +16,8 @@ export const handler = middy(
     logger.info('Processing deleteTweet event', { event })
     
     const tweetId = event.pathParameters.tweetId
-    // TODO: Remove a tweet item by id
+    
+    // Remove a tweet item by id
     const userId = getUserId(event)
 
     await deleteTweet(userId, tweetId)

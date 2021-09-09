@@ -1,23 +1,23 @@
-# Serverless TODO
+# Serverless TWEET
 
-To implement this project, you need to implement a simple TODO application using AWS Lambda and Serverless framework. Search for all comments starting with the `TODO:` in the code to find the placeholders that you need to implement.
+To implement this project, you need to implement a simple TWEET application using AWS Lambda and Serverless framework. Search for all comments starting with the `TWEET:` in the code to find the placeholders that you need to implement.
 
-# Functionality of the application
+## Functionality of the application
 
-This application will allow creating/removing/updating/fetching TODO items. Each TODO item can optionally have an attachment image. Each user only has access to TODO items that he/she has created.
+This application will allow creating/removing/updating/fetching TWEET items. Each TWEET item can optionally have an attachment image. Each user only has access to TWEET items that he/she has created.
 
-# TODO items
+## TWEET items
 
-The application should store TODO items, and each TODO item contains the following fields:
+The application should store TWEET items, and each TWEET item contains the following fields:
 
 * `todoId` (string) - a unique id for an item
 * `createdAt` (string) - date and time when an item was created
-* `name` (string) - name of a TODO item (e.g. "Change a light bulb")
+* `name` (string) - name of a TWEET item (e.g. "Change a light bulb")
 * `dueDate` (string) - date and time by which an item should be completed
 * `done` (boolean) - true if an item was completed, false otherwise
-* `attachmentUrl` (string) (optional) - a URL pointing to an image attached to a TODO item
+* `attachmentUrl` (string) (optional) - a URL pointing to an image attached to a TWEET item
 
-You might also store an id of a user who created a TODO item.
+You might also store an id of a user who created a TWEET item.
 
 ## Prerequisites
 
@@ -40,7 +40,7 @@ You might also store an id of a user who created a TODO item.
    sls config credentials --provider aws --key YOUR_ACCESS_KEY_ID --secret YOUR_SECRET_KEY --profile serverless
    ```
    
-# Functions to be implemented
+## Functions to be implemented
 
 To implement this project, you need to implement the following functions and configure them in the `serverless.yml` file:
 
@@ -73,9 +73,9 @@ It should return data that looks like this:
 }
 ```
 
-* `CreateTodo` - should create a new TODO for a current user. A shape of data send by a client application to this function can be found in the `CreateTodoRequest.ts` file
+* `CreateTodo` - should create a new TWEET for a current user. A shape of data send by a client application to this function can be found in the `CreateTodoRequest.ts` file
 
-It receives a new TODO item to be created in JSON format that looks like this:
+It receives a new TWEET item to be created in JSON format that looks like this:
 
 ```json
 {
@@ -87,7 +87,7 @@ It receives a new TODO item to be created in JSON format that looks like this:
 }
 ```
 
-It should return a new TODO item that looks like this:
+It should return a new TWEET item that looks like this:
 
 ```json
 {
@@ -102,9 +102,9 @@ It should return a new TODO item that looks like this:
 }
 ```
 
-* `UpdateTodo` - should update a TODO item created by a current user. A shape of data send by a client application to this function can be found in the `UpdateTodoRequest.ts` file
+* `UpdateTodo` - should update a TWEET item created by a current user. A shape of data send by a client application to this function can be found in the `UpdateTodoRequest.ts` file
 
-It receives an object that contains three fields that can be updated in a TODO item:
+It receives an object that contains three fields that can be updated in a TWEET item:
 
 ```json
 {
@@ -118,11 +118,11 @@ The id of an item that should be updated is passed as a URL parameter.
 
 It should return an empty body.
 
-* `DeleteTodo` - should delete a TODO item created by a current user. Expects an id of a TODO item to remove.
+* `DeleteTodo` - should delete a TWEET item created by a current user. Expects an id of a TWEET item to remove.
 
 It should return an empty body.
 
-* `GenerateUploadUrl` - returns a pre-signed URL that can be used to upload an attachment file for a TODO item.
+* `GenerateUploadUrl` - returns a pre-signed URL that can be used to upload an attachment file for a TWEET item.
 
 It should return a JSON object that looks like this:
 
@@ -191,7 +191,7 @@ Once you have finished developing your application, please set `apiId` and Auth0
 
 # Suggestions
 
-To store TODO items, you might want to use a DynamoDB table with local secondary index(es). A create a local secondary index you need to create a DynamoDB resource like this:
+To store TWEET items, you might want to use a DynamoDB table with local secondary index(es). A create a local secondary index you need to create a DynamoDB resource like this:
 
 ```yml
 
@@ -239,9 +239,9 @@ await this.dynamoDBClient
   .promise()
 ```
 
-# How to run the application
+## How to run the application
 
-## Backend
+### Backend
 
 To deploy an application run the following commands:
 
@@ -251,19 +251,19 @@ npm install
 sls deploy -v
 ```
 
-## Frontend
+### Frontend
 
 To run a client application first edit the `client/src/config.ts` file to set correct parameters. And then run the following commands:
 
-```
+```bash
 cd client
 npm install
 npm run start
 ```
 
-This should start a development server with the React application that will interact with the serverless TODO application.
+This should start a development server with the React application that will interact with the serverless TWEET application.
 
-# Postman collection
+## Postman collection
 
 An alternative way to test your API, you can use the Postman collection that contains sample requests. You can find a Postman collection in this project. To import this collection, do the following.
 
