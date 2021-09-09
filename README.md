@@ -10,11 +10,9 @@ This application will allow creating/removing/updating/fetching TWEET items. Eac
 
 The application should store TWEET items, and each TWEET item contains the following fields:
 
-* `todoId` (string) - a unique id for an item
+* `tweetId` (string) - a unique id for an item
 * `createdAt` (string) - date and time when an item was created
-* `name` (string) - name of a TWEET item (e.g. "Change a light bulb")
-* `dueDate` (string) - date and time by which an item should be completed
-* `done` (boolean) - true if an item was completed, false otherwise
+* `thought` (string) - Contents of a TWEET item (e.g. "#climateChange is real")
 * `attachmentUrl` (string) (optional) - a URL pointing to an image attached to a TWEET item
 
 You might also store an id of a user who created a TWEET item.
@@ -23,15 +21,18 @@ You might also store an id of a user who created a TWEET item.
 
 * <a href="https://manage.auth0.com/" target="_blank">Auth0 account</a>
 * <a href="https://github.com" target="_blank">GitHub account</a>
-* <a href="https://nodejs.org/en/download/package-manager/" target="_blank">NodeJS</a> version up to 12.xx 
-* Serverless 
-   * Create a <a href="https://dashboard.serverless.com/" target="_blank">Serverless account</a> user
-   * Install the Serverless Framework’s CLI  (up to VERSION=2.21.1). Refer to the <a href="https://www.serverless.com/framework/docs/getting-started/" target="_blank">official documentation</a> for more help.
+* <a href="https://nodejs.org/en/download/package-manager/" target="_blank">NodeJS</a> version up to 12.xx
+* Serverless
+  * Create a <a href="https://dashboard.serverless.com/" target="_blank">Serverless account</a> user
+  * Install the Serverless Framework’s CLI  (up to VERSION=2.21.1). Refer to the <a href="https://www.serverless.com/framework/docs/getting-started/" target="_blank">official documentation</a> for more help.
+
    ```bash
    npm install -g serverless@2.21.1
    serverless --version
    ```
-   * Login and configure serverless to use the AWS credentials 
+
+  * Login and configure serverless to use the AWS credentials
+
    ```bash
    # Login to your dashboard from the CLI. It will ask to open your browser and finish the process.
    serverless login
@@ -39,14 +40,14 @@ You might also store an id of a user who created a TWEET item.
    # You need to have a pair of Access key (YOUR_ACCESS_KEY_ID and YOUR_SECRET_KEY) of an IAM user with Admin access permissions
    sls config credentials --provider aws --key YOUR_ACCESS_KEY_ID --secret YOUR_SECRET_KEY --profile serverless
    ```
-   
+
 ## Functions to be implemented
 
 To implement this project, you need to implement the following functions and configure them in the `serverless.yml` file:
 
 * `Auth` - this function should implement a custom authorizer for API Gateway that should be added to all other functions.
 
-* `GetTodos` - should return all TODOs for a current user. A user id can be extracted from a JWT token that is sent by the frontend
+* `GetTweets` - should return all TWEETS for a current user. A user id can be extracted from a JWT token that is sent by the frontend
 
 It should return data that looks like this:
 
@@ -54,35 +55,29 @@ It should return data that looks like this:
 {
   "items": [
     {
-      "todoId": "123",
+      "tweetId": "123",
       "createdAt": "2019-07-27T20:01:45.424Z",
-      "name": "Buy milk",
-      "dueDate": "2019-07-29T20:01:45.424Z",
-      "done": false,
+      "thought": "Buy milk",
       "attachmentUrl": "http://example.com/image.png"
     },
     {
-      "todoId": "456",
+      "tweetId": "456",
       "createdAt": "2019-07-27T20:01:45.424Z",
-      "name": "Send a letter",
-      "dueDate": "2019-07-29T20:01:45.424Z",
-      "done": true,
+      "thought": "Send a letter",
       "attachmentUrl": "http://example.com/image.png"
     },
   ]
 }
 ```
 
-* `CreateTodo` - should create a new TWEET for a current user. A shape of data send by a client application to this function can be found in the `CreateTodoRequest.ts` file
+* `CreateTweet` - should create a new TWEET for a current user. A shape of data send by a client application to this function can be found in the `CreateTweetRequest.ts` file
 
 It receives a new TWEET item to be created in JSON format that looks like this:
 
 ```json
 {
   "createdAt": "2019-07-27T20:01:45.424Z",
-  "name": "Buy milk",
-  "dueDate": "2019-07-29T20:01:45.424Z",
-  "done": false,
+  "thought": "Buy milk",
   "attachmentUrl": "http://example.com/image.png"
 }
 ```
@@ -92,25 +87,21 @@ It should return a new TWEET item that looks like this:
 ```json
 {
   "item": {
-    "todoId": "123",
+    "tweetId": "123",
     "createdAt": "2019-07-27T20:01:45.424Z",
-    "name": "Buy milk",
-    "dueDate": "2019-07-29T20:01:45.424Z",
-    "done": false,
+    "thought": "Buy milk",
     "attachmentUrl": "http://example.com/image.png"
   }
 }
 ```
 
-* `UpdateTodo` - should update a TWEET item created by a current user. A shape of data send by a client application to this function can be found in the `UpdateTodoRequest.ts` file
+* `UpdateTweet` - should update a TWEET item created by a current user. A shape of data send by a client application to this function can be found in the `UpdateTweetRequest.ts` file
 
 It receives an object that contains three fields that can be updated in a TWEET item:
 
 ```json
 {
-  "name": "Buy bread",
-  "dueDate": "2019-07-29T20:01:45.424Z",
-  "done": true
+  "thought": "Buy bread",
 }
 ```
 
@@ -118,7 +109,7 @@ The id of an item that should be updated is passed as a URL parameter.
 
 It should return an empty body.
 
-* `DeleteTodo` - should delete a TWEET item created by a current user. Expects an id of a TWEET item to remove.
+* `DeleteTweet` - should delete a TWEET item created by a current user. Expects an id of a TWEET item to remove.
 
 It should return an empty body.
 
@@ -138,8 +129,7 @@ An id of a user can be extracted from a JWT token passed by a client.
 
 You also need to add any necessary resources to the `resources` section of the `serverless.yml` file such as DynamoDB table and S3 bucket.
 
-
-# Frontend
+## Frontend
 
 The `client` folder contains a web application that can use the API that should be developed in the project.
 
@@ -156,15 +146,15 @@ export const authConfig = {
 }
 ```
 
-## Authentication
+### Authentication
 
 To implement authentication in your application, you would have to create an Auth0 application and copy "domain" and "client id" to the `config.ts` file in the `client` folder. We recommend using asymmetrically encrypted JWT tokens.
 
-# Best practices
+## Best practices
 
 To complete this exercise, please follow the best practices from the 6th lesson of this course.
 
-## Logging
+### Logging
 
 The starter code comes with a configured [Winston](https://github.com/winstonjs/winston) logger that creates [JSON formatted](https://stackify.com/what-is-structured-logging-and-why-developers-need-it/) log statements. You can use it to write log messages like this:
 
@@ -180,8 +170,7 @@ logger.info('User was authorized', {
 })
 ```
 
-
-# Grading the submission
+## Grading the submission
 
 Once you have finished developing your application, please set `apiId` and Auth0 parameters in the `config.ts` file in the `client` folder. A reviewer would start the React development server to run the frontend that should be configured to interact with your serverless application.
 
@@ -189,13 +178,13 @@ Once you have finished developing your application, please set `apiId` and Auth0
 
 *Please leave your application running until a submission is reviewed. If implemented correctly it will cost almost nothing when your application is idle.*
 
-# Suggestions
+## Suggestions
 
 To store TWEET items, you might want to use a DynamoDB table with local secondary index(es). A create a local secondary index you need to create a DynamoDB resource like this:
 
 ```yml
 
-TodosTable:
+TweetsTable:
   Type: AWS::DynamoDB::Table
   Properties:
     AttributeDefinitions:
@@ -211,7 +200,7 @@ TodosTable:
       - AttributeName: sortKey
         KeyType: RANGE
     BillingMode: PAY_PER_REQUEST
-    TableName: ${self:provider.environment.TODOS_TABLE}
+    TableName: ${self:provider.environment.TWEETS_TABLE}
     LocalSecondaryIndexes:
       - IndexName: ${self:provider.environment.INDEX_NAME}
         KeySchema:
@@ -271,16 +260,13 @@ Click on the import button:
 
 ![Alt text](images/import-collection-1.png?raw=true "Image 1")
 
-
 Click on the "Choose Files":
 
 ![Alt text](images/import-collection-2.png?raw=true "Image 2")
 
-
 Select a file to import:
 
 ![Alt text](images/import-collection-3.png?raw=true "Image 3")
-
 
 Right click on the imported collection to set variables for the collection:
 
