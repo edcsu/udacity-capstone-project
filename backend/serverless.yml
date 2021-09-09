@@ -24,7 +24,7 @@ provider:
     TWEETS_INDEX: tweets-index-${self:provider.environment.TWEETS_TABLE}
     ATTACHMENT_S3_BUCKET: serverless-c4-tweet-images-${self:provider.stage}-capstone256keith
     SIGNED_URL_EXPIRATION: 300
-  #  AUTH_0_JWKS_URL: 
+    AUTH_0_JWKS_URL: https://dev-p0z9cafx.us.auth0.com/.well-known/jwks.json
 
   logs:
     # Enable API Gateway logs

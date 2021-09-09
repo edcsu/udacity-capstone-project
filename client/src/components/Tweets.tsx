@@ -1,6 +1,5 @@
 import dateFormat from 'dateformat'
 import { History } from 'history'
-import update from 'immutability-helper'
 import * as React from 'react'
 import {
   Button,
@@ -13,7 +12,7 @@ import {
   Loader
 } from 'semantic-ui-react'
 
-import { createTweet, deleteTweet, getTweets, patchTweet } from '../api/tweets-api'
+import { createTweet, deleteTweet, getTweets } from '../api/tweets-api'
 import Auth from '../auth/Auth'
 import { Tweet } from '../types/Tweet'
 
@@ -22,15 +21,15 @@ interface TweetProps {
   history: History
 }
 
-interface TodosState {
-  todos: Tweet[]
+interface TweetsState {
+  tweets: Tweet[]
   newTweetName: string
   loadingTodos: boolean
 }
 
-export class Todos extends React.PureComponent<TweetProps, TodosState> {
-  state: TodosState = {
-    todos: [],
+export class Tweets extends React.PureComponent<TweetProps, TweetsState> {
+  state: TweetsState = {
+    tweets: [],
     newTweetName: '',
     loadingTodos: true
   }
@@ -40,16 +39,16 @@ export class Todos extends React.PureComponent<TweetProps, TodosState> {
   }
 
   onEditButtonClick = (tweetId: string) => {
-    this.props.history.push(`/todos/${tweetId}/edit`)
+    this.props.history.push(`/tweets/${tweetId}/edit`)
   }
 
-  onTodoCreate = async (event: React.ChangeEvent<HTMLButtonElement>) => {
+  onTweetCreate = async (event: React.ChangeEvent<HTMLButtonElement>) => {
     try {
       const newTodo = await createTweet(this.props.auth.getIdToken(), {
         thought: this.state.newTweetName,
       })
       this.setState({
-        todos: [...this.state.todos, newTodo],
+        tweets: [...this.state.tweets, newTodo],
         newTweetName: ''
       })
     } catch {
@@ -57,25 +56,11 @@ export class Todos extends React.PureComponent<TweetProps, TodosState> {
     }
   }
 
-  onTodoDelete = async (tweetId: string) => {
+  onTweetDelete = async (tweetId: string) => {
     try {
       await deleteTweet(this.props.auth.getIdToken(), tweetId)
       this.setState({
-        todos: this.state.todos.filter(tweet => tweet.tweetId !== tweetId)
-      })
-    } catch {
-      alert('Tweet deletion failed')
-    }
-  }
-
-  onTodoCheck = async (pos: number) => {
-    try {
-      const tweet = this.state.todos[pos]
-      await patchTweet(this.props.auth.getIdToken(), tweet.tweetId, {
-        thought: tweet.thought,
-      })
-      this.setState({
-        todos: update(this.state.todos, {})
+        tweets: this.state.tweets.filter(tweet => tweet.tweetId !== tweetId)
       })
     } catch {
       alert('Tweet deletion failed')
@@ -84,24 +69,24 @@ export class Todos extends React.PureComponent<TweetProps, TodosState> {
 
   async componentDidMount() {
     try {
-      const todos = await getTweets(this.props.auth.getIdToken())
+      const tweets = await getTweets(this.props.auth.getIdToken())
       this.setState({
-        todos,
+        tweets: tweets,
         loadingTodos: false
       })
     } catch (e: any) {
-      alert(`Failed to fetch todos: ${e.message}`)
+      alert(`Failed to fetch tweets: ${e.message}`)
     }
   }
 
   render() {
     return (
       <div>
-        <Header as="h1">TODOs</Header>
+        <Header as="h1">TWEETS</Header>
 
         {this.rendercreateTweetInput()}
 
-        {this.renderTodos()}
+        {this.renderTweets()}
       </div>
     )
   }
@@ -115,12 +100,12 @@ export class Todos extends React.PureComponent<TweetProps, TodosState> {
               color: 'teal',
               labelPosition: 'left',
               icon: 'add',
-              content: 'New task',
-              onClick: this.onTodoCreate
+              content: 'New tweet',
+              onClick: this.onTweetCreate
             }}
             fluid
             actionPosition="left"
-            placeholder="To change the world..."
+            placeholder="#Udacity is awesome..."
             onChange={this.handleNameChange}
           />
         </Grid.Column>
@@ -131,28 +116,28 @@ export class Todos extends React.PureComponent<TweetProps, TodosState> {
     )
   }
 
-  renderTodos() {
+  renderTweets() {
     if (this.state.loadingTodos) {
       return this.renderLoading()
     }
 
-    return this.renderTodosList()
+    return this.renderTweetsList()
   }
 
   renderLoading() {
     return (
       <Grid.Row>
         <Loader indeterminate active inline="centered">
-          Loading TODOs
+          Loading TWEETS
         </Loader>
       </Grid.Row>
     )
   }
 
-  renderTodosList() {
+  renderTweetsList() {
     return (
       <Grid padded>
-        {this.state.todos.map((tweet, pos) => {
+        {this.state.tweets.map((tweet, pos) => {
           return (
             <Grid.Row key={tweet.tweetId}>
               <Grid.Column width={10} verticalAlign="middle">
@@ -171,7 +156,7 @@ export class Todos extends React.PureComponent<TweetProps, TodosState> {
                 <Button
                   icon
                   color="red"
-                  onClick={() => this.onTodoDelete(tweet.tweetId)}
+                  onClick={() => this.onTweetDelete(tweet.tweetId)}
                 >
                   <Icon name="delete" />
                 </Button>
