@@ -1,6 +1,6 @@
 /**
  * Fields in a request to update a single TODO item.
  */
-export interface UpdateTodoRequest {
+export interface UpdateTweetRequest {
   thought: string
 }

@@ -1,8 +1,8 @@
 import { TweetsAccess } from './tweetsAcess'
 import { AttachmentUtils } from './attachmentUtils';
 import { Tweet } from '../models/Tweet'
-import { CreateTodoRequest } from '../requests/CreateTodoRequest'
-import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
+import { CreateTweetRequest } from '../requests/CreateTweetRequest'
+import { UpdateTweetRequest } from '../requests/UpdateTweetRequest'
 import { createLogger } from '../utils/logger'
 import * as uuid from 'uuid'
 import * as createError from 'http-errors'
@@ -21,7 +21,7 @@ export async function getTweets(userId: string): Promise<Tweet[]> {
   return await tweetsAccess.getTweetItems(userId)
 }
 
-export async function createTweet(userId: string, createTodoRequest: CreateTodoRequest): Promise<Tweet> {
+export async function createTweet(userId: string, createTodoRequest: CreateTweetRequest): Promise<Tweet> {
   const tweetId = uuid.v4()
 
   const newItem: Tweet = {
@@ -39,7 +39,7 @@ export async function createTweet(userId: string, createTodoRequest: CreateTodoR
   return newItem
 }
 
-export async function updateTweet(userId: string, tweetId: string, updateTodoRequest: UpdateTodoRequest) {
+export async function updateTweet(userId: string, tweetId: string, updateTodoRequest: UpdateTweetRequest) {
   logger.info(`Updating tweet ${tweetId} for user ${userId}`, { userId, tweetId, TweetUpdate: updateTodoRequest })
 
   const item = await tweetsAccess.getTweetItem(tweetId, userId)

@@ -5,7 +5,7 @@ import * as middy from 'middy'
 import { cors, httpErrorHandler } from 'middy/middlewares'
 
 import { updateTweet } from '../../helpers/tweets'
-import { UpdateTodoRequest } from '../../requests/UpdateTodoRequest'
+import { UpdateTweetRequest } from '../../requests/UpdateTweetRequest'
 import { getUserId } from '../utils'
 
 import { createLogger } from '../../utils/logger'
@@ -18,7 +18,7 @@ export const handler = middy(
 
     const userId = getUserId(event)
     const tweetId = event.pathParameters.tweetId
-    const updatedTodo: UpdateTodoRequest = JSON.parse(event.body)
+    const updatedTodo: UpdateTweetRequest = JSON.parse(event.body)
     // TODO: Update a tweet item with the provided id using values in the "updatedTweet" object
 
     await updateTweet(userId, tweetId, updatedTodo)

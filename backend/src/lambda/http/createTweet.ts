@@ -2,7 +2,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import 'source-map-support/register'
 import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
-import { CreateTodoRequest } from '../../requests/CreateTodoRequest'
+import { CreateTweetRequest } from '../../requests/CreateTweetRequest'
 import { getUserId } from '../utils';
 import { createTweet } from '../../helpers/tweets'
 import { createLogger } from '../../utils/logger'
@@ -16,7 +16,7 @@ export const handler = middy(
       
     // TODO: Implement creating a new Tweet item
     const userId = getUserId(event)
-    const newTodo: CreateTodoRequest = JSON.parse(event.body)
+    const newTodo: CreateTweetRequest = JSON.parse(event.body)
 
     const newItem = await createTweet(userId, newTodo)
 
