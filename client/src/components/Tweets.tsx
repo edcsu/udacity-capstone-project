@@ -97,9 +97,9 @@ export class Tweets extends React.PureComponent<TweetProps, TweetsState> {
         <Grid.Column width={16}>
           <Input
             action={{
-              color: 'teal',
+              color: 'twitter',
               labelPosition: 'left',
-              icon: 'add',
+              icon: 'twitter',
               content: 'New tweet',
               onClick: this.onTweetCreate
             }}
