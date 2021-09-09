@@ -1,10 +1,10 @@
 import { apiEndpoint } from '../config'
-import { Todo } from '../types/Todo';
-import { CreateTodoRequest } from '../types/CreateTodoRequest';
+import { Tweet } from '../types/Tweet';
+import { createTweetRequest } from '../types/createTweetRequest';
 import Axios from 'axios'
-import { UpdateTodoRequest } from '../types/UpdateTodoRequest';
+import { UpdateTweetRequest } from '../types/UpdateTweetRequest';
 
-export async function getTodos(idToken: string): Promise<Todo[]> {
+export async function getTweets(idToken: string): Promise<Tweet[]> {
   console.log('Fetching todos')
 
   const response = await Axios.get(`${apiEndpoint}/todos`, {
@@ -17,10 +17,10 @@ export async function getTodos(idToken: string): Promise<Todo[]> {
   return response.data.items
 }
 
-export async function createTodo(
+export async function createTweet(
   idToken: string,
-  newTodo: CreateTodoRequest
-): Promise<Todo> {
+  newTodo: createTweetRequest
+): Promise<Tweet> {
   const response = await Axios.post(`${apiEndpoint}/todos`,  JSON.stringify(newTodo), {
     headers: {
       'Content-Type': 'application/json',
@@ -30,10 +30,10 @@ export async function createTodo(
   return response.data.item
 }
 
-export async function patchTodo(
+export async function patchTweet(
   idToken: string,
   todoId: string,
-  updatedTodo: UpdateTodoRequest
+  updatedTodo: UpdateTweetRequest
 ): Promise<void> {
   await Axios.patch(`${apiEndpoint}/todos/${todoId}`, JSON.stringify(updatedTodo), {
     headers: {
@@ -43,7 +43,7 @@ export async function patchTodo(
   })
 }
 
-export async function deleteTodo(
+export async function deleteTweet(
   idToken: string,
   todoId: string
 ): Promise<void> {
