@@ -23,8 +23,8 @@ provider:
   # Use these variables in the functions and resouorces section below. For example, 
   # ${self:provider.environment.ATTACHMENT_S3_BUCKET}
   environment:
-    TODOS_TABLE: Todos-${self:provider.stage}
-    TODOS_CREATED_AT_INDEX: todos-index-${self:provider.environment.TODOS_TABLE}
+    TWEETS_TABLE: Todos-${self:provider.stage}
+    TWEETS_CREATED_AT_INDEX: tweets-index-${self:provider.environment.TWEETS_TABLE}
     ATTACHMENT_S3_BUCKET: serverless-c4-todo-images-${self:provider.stage}-capstone256keith
     SIGNED_URL_EXPIRATION: 300
   #  AUTH_0_JWKS_URL: 
@@ -59,11 +59,11 @@ functions:
   # TODO: Configure this function - 
   # Provide iamRoleStatements property for performing Actions on DynamoDB
   GetTodos:
-    handler: src/lambda/http/getTodos.handler
+    handler: src/lambda/http/getTweets.handler
     events:
       - http:
           method: get
-          path: todos
+          path: tweets
           cors: true
           authorizer: Auth
     iamRoleStatements:
@@ -71,12 +71,12 @@ functions:
         Action:
           - dynamodb:Query
           - dynamodb:Scan
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TWEETS_TABLE}
       - Effect: Allow
         Action:
           - dynamodb:Scan
           - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/${self:provider.environment.TODOS_CREATED_AT_INDEX}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TWEETS_TABLE}/index/${self:provider.environment.TWEETS_CREATED_AT_INDEX}
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
@@ -89,11 +89,11 @@ functions:
   # To refer to an AWS resource defined in the "Resources" section, you can use "Resource: !GetAtt <resource-name>.Arn"
   # To validate incoming HTTP requests, we have provided the request schemas in function definition below. 
   CreateTodo:
-    handler: src/lambda/http/createTodo.handler
+    handler: src/lambda/http/createTweet.handler
     events:
       - http:
           method: post
-          path: todos
+          path: tweets
           cors: true
           authorizer: Auth
           reqValidatorName: RequestBodyValidator
@@ -102,7 +102,7 @@ functions:
       - Effect: Allow
         Action:
           - dynamodb:PutItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TWEETS_TABLE}
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
@@ -113,13 +113,13 @@ functions:
   # TODO: Configure this function
   # Provide property for setting up CORS, Authorizer, iamRoleStatements, and request schemas
   UpdateTodo:
-    handler: src/lambda/http/updateTodo.handler
+    handler: src/lambda/http/updateTweet.handler
     events:
       - http:
           method: patch
           cors: true
           authorizer: Auth
-          path: todos/{todoId}
+          path: tweets/{tweetId}
           reqValidatorName: RequestBodyValidator
 
     iamRoleStatements:
@@ -127,7 +127,7 @@ functions:
         Action:
           - dynamodb:UpdateItem
           - dynamodb:GetItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TWEETS_TABLE}
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
@@ -138,20 +138,20 @@ functions:
   # TODO: Configure this function
   # Provide property for setting up CORS, Authorizer, iamRoleStatements
   DeleteTodo:
-    handler: src/lambda/http/deleteTodo.handler
+    handler: src/lambda/http/deleteTweet.handler
     events:
       - http:
           method: delete
           cors: true
           authorizer: Auth
-          path: todos/{todoId}
+          path: tweets/{tweetId}
 
     iamRoleStatements:
       - Effect: Allow
         Action:
           - dynamodb:DeleteItem
           - dynamodb:GetItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TWEETS_TABLE}
       - Effect: Allow
         Action:
           - xray:PutTraceSegments
@@ -168,7 +168,7 @@ functions:
           method: post
           cors: true
           authorizer: Auth
-          path: todos/{todoId}/attachment
+          path: tweets/{tweetId}/attachment
 
     iamRoleStatements:
       - Effect: Allow
@@ -215,24 +215,24 @@ resources:
         AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
-          - AttributeName: todoId
+          - AttributeName: tweetId
             AttributeType: S
         KeySchema:
           - AttributeName: userId
             KeyType: HASH
-          - AttributeName: todoId
+          - AttributeName: tweetId
             KeyType: RANGE
         LocalSecondaryIndexes:
-          - IndexName: ${self:provider.environment.TODOS_CREATED_AT_INDEX}
+          - IndexName: ${self:provider.environment.TWEETS_CREATED_AT_INDEX}
             KeySchema:
               - AttributeName: userId
                 KeyType: HASH
-              - AttributeName: todoId
+              - AttributeName: tweetId
                 KeyType: RANGE
             Projection:
               ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
-        TableName: ${self:provider.environment.TODOS_TABLE}
+        TableName: ${self:provider.environment.TWEETS_TABLE}
 
     # TODO: Complete the bucket properties below. 
     # Do not forget to add the CorsConfiguration propoerty
