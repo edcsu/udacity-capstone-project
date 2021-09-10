@@ -5,15 +5,15 @@ import Axios from 'axios'
 import { UpdateTweetRequest } from '../types/UpdateTweetRequest';
 
 export async function getTweets(idToken: string): Promise<Tweet[]> {
-  console.log('Fetching todos')
+  console.log('Fetching tweets')
 
-  const response = await Axios.get(`${apiEndpoint}/todos`, {
+  const response = await Axios.get(`${apiEndpoint}/tweets`, {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
     },
   })
-  console.log('Todos:', response.data)
+  console.log('Tweets:', response.data)
   return response.data.items
 }
 
@@ -21,7 +21,7 @@ export async function createTweet(
   idToken: string,
   newTodo: createTweetRequest
 ): Promise<Tweet> {
-  const response = await Axios.post(`${apiEndpoint}/todos`,  JSON.stringify(newTodo), {
+  const response = await Axios.post(`${apiEndpoint}/tweets`,  JSON.stringify(newTodo), {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
@@ -35,7 +35,7 @@ export async function patchTweet(
   todoId: string,
   updatedTodo: UpdateTweetRequest
 ): Promise<void> {
-  await Axios.patch(`${apiEndpoint}/todos/${todoId}`, JSON.stringify(updatedTodo), {
+  await Axios.patch(`${apiEndpoint}/tweets/${todoId}`, JSON.stringify(updatedTodo), {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
@@ -47,7 +47,7 @@ export async function deleteTweet(
   idToken: string,
   todoId: string
 ): Promise<void> {
-  await Axios.delete(`${apiEndpoint}/todos/${todoId}`, {
+  await Axios.delete(`${apiEndpoint}/tweets/${todoId}`, {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
@@ -59,7 +59,7 @@ export async function getUploadUrl(
   idToken: string,
   todoId: string
 ): Promise<string> {
-  const response = await Axios.post(`${apiEndpoint}/todos/${todoId}/attachment`, '', {
+  const response = await Axios.post(`${apiEndpoint}/tweets/${todoId}/attachment`, '', {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
