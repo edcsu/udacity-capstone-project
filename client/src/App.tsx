@@ -68,14 +68,12 @@ export default class App extends Component<AppProps, AppState> {
   logInLogOutButton() {
     if (this.props.auth.isAuthenticated()) {
       return (
-        <Menu.Item name="logout" onClick={this.handleLogout}>
-          Log Out
+        <Menu.Item name="log out" icon="sign-out" onClick={this.handleLogout}>
         </Menu.Item>
       )
     } else {
       return (
-        <Menu.Item name="login" onClick={this.handleLogin}>
-          Log In
+        <Menu.Item name="login" icon="sign-in" onClick={this.handleLogin}>
         </Menu.Item>
       )
     }
