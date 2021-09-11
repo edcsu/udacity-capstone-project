@@ -21,6 +21,16 @@ export async function getTweets(userId: string): Promise<Tweet[]> {
   return await tweetsAccess.getTweetItems(userId)
 }
 
+export async function getTweet(userId: string, tweetId: string): Promise<Tweet> {
+  logger.info(`Retrieving tweet for user ${userId}`, { userId })
+
+  const item = await tweetsAccess.getTweetItem(tweetId, userId)
+
+  if (!item)
+    createError(404, 'tweet not found')
+  return item
+}
+
 export async function createTweet(userId: string, createTweetRequest: CreateTweetRequest): Promise<Tweet> {
   const tweetId = uuid.v4()
 

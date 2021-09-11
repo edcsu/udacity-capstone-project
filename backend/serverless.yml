@@ -79,6 +79,34 @@ functions:
         Resource:
           - '*'
 
+  getTweet:
+    handler: src/lambda/http/getTweet.handler
+    events:
+      - http:
+          method: get
+          cors: true
+          authorizer: Auth
+          path: tweets/{tweetId}
+          reqValidatorName: RequestBodyValidator
+
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+          - dynamodb:Scan
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TWEETS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Scan
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TWEETS_TABLE}/index/${self:provider.environment.TWEETS_INDEX}
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments
+          - xray:PutTelemetryRecords
+        Resource:
+          - '*'
+
   CreateTweet:
     handler: src/lambda/http/createTweet.handler
     events:
