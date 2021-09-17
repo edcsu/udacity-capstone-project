@@ -41,7 +41,7 @@ You might also store an id of a user who created a TWEET item.
    sls config credentials --provider aws --key YOUR_ACCESS_KEY_ID --secret YOUR_SECRET_KEY --profile serverless
    ```
 
-## Functions to be implemented
+## Functions implemented
 
 To implement this project, you need to implement the following functions and configure them in the `serverless.yml` file:
 
@@ -123,7 +123,12 @@ It should return a JSON object that looks like this:
 }
 ```
 
-All functions are already connected to appropriate events from API Gateway.
+* `SendUploadNotifications` - sends a notification when a new imagee is attached to a tweet.
+
+* `ConnectHandler` - React to connect messages when a user connects to the API Gateway.
+
+* `DisconnectHandler` - React to when when a user disconnects from the API Gateway.
+this enables to us to know the list of users to send notifications to.
 
 An id of a user can be extracted from a JWT token passed by a client.
 
