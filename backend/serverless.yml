@@ -6,6 +6,8 @@ plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
   - serverless-plugin-tracing
+  - serverless-reqvalidator-plugin
+  - serverless-aws-documentation
 
 provider:
   name: aws
@@ -44,6 +46,19 @@ provider:
 
 custom:
   topicName: imagesTopic-${self:provider.stage}
+  documentation:
+    api:
+      info:
+        version: v1.0.0
+        title: Twitter clone API
+        description: Serverless application for tweeting
+    models:
+      - name: CreateTweetRequest
+        contentType: application/json
+        schema: ${file(models/create-tweet-model.json)}
+      - name: UpdateTweetRequest
+        contentType: application/json
+        schema: ${file(models/update-tweet-model.json)}
 
 functions:
 
@@ -91,7 +106,6 @@ functions:
           cors: true
           authorizer: Auth
           path: tweets/{tweetId}
-          reqValidatorName: RequestBodyValidator
 
     iamRoleStatements:
       - Effect: Allow
@@ -120,6 +134,11 @@ functions:
           cors: true
           authorizer: Auth
           reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Create a new tweet
+            description: Create a new tweet
+            requestModels:
+              'application/json': CreateTweetRequest
 
     iamRoleStatements:
       - Effect: Allow
@@ -142,6 +161,11 @@ functions:
           authorizer: Auth
           path: tweets/{tweetId}
           reqValidatorName: RequestBodyValidator
+          documentation:
+            summary: Update a tweet
+            description: Update a tweet
+            requestModels:
+              'application/json': UpdateTweetRequest
 
     iamRoleStatements:
       - Effect: Allow

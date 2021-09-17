@@ -20,6 +20,19 @@ export const handler = middy(
     const tweetId = event.pathParameters.tweetId
     const updatedTweet: UpdateTweetRequest = JSON.parse(event.body)
 
+    if (!updatedTweet.thought) {
+      return {
+        statusCode: 400,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
+        body: JSON.stringify({
+          error: "The tweet must not be empty"
+        })
+      }
+    }
+    
     await updateTweet(userId, tweetId, updatedTweet)
 
     logger.info(`Tweet updated succesfully with id: ${tweetId}.`)

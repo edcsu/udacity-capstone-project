@@ -18,6 +18,19 @@ export const handler = middy(
     const userId = getUserId(event)
     const newTweet: CreateTweetRequest = JSON.parse(event.body)
 
+    if (!newTweet.thought) {
+      return {
+        statusCode: 400,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
+        body: JSON.stringify({
+          error: "The tweet must not be empty"
+        })
+      }
+    }
+
     const newItem = await createTweet(userId, newTweet)
 
     logger.info(`A new tweet was created.`)
