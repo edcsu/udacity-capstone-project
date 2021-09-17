@@ -95,7 +95,7 @@ export default class App extends Component<AppProps, AppState> {
         />
 
         <Route
-          path="/todos/:tweetId/edit"
+          path="/tweets/:tweetId/edit"
           exact
           render={props => {
             return <EditTweet {...props} auth={this.props.auth} />

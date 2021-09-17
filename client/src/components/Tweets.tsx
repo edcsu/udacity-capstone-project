@@ -1,4 +1,3 @@
-import dateFormat from 'dateformat'
 import { History } from 'history'
 import * as React from 'react'
 import {
@@ -140,7 +139,7 @@ export class Tweets extends React.PureComponent<TweetProps, TweetsState> {
         {this.state.tweets.map((tweet, pos) => {
           return (
             <Grid.Row key={tweet.tweetId}>
-              <Grid.Column width={10} verticalAlign="middle">
+              <Grid.Column width={14} verticalAlign="middle">
                 {tweet.thought}
               </Grid.Column>
               <Grid.Column width={1} floated="right">
@@ -172,12 +171,5 @@ export class Tweets extends React.PureComponent<TweetProps, TweetsState> {
         })}
       </Grid>
     )
-  }
-
-  calculateDueDate(): string {
-    const date = new Date()
-    date.setDate(date.getDate() + 7)
-
-    return dateFormat(date, 'yyyy-mm-dd') as string
   }
 }

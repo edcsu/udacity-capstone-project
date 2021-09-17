@@ -32,10 +32,11 @@ export async function createTweet(
 
 export async function patchTweet(
   idToken: string,
-  todoId: string,
-  updatedTodo: UpdateTweetRequest
+  tweetId: string,
+  updatedTweet: UpdateTweetRequest
 ): Promise<void> {
-  await Axios.patch(`${apiEndpoint}/tweets/${todoId}`, JSON.stringify(updatedTodo), {
+  console.log('Updating tweet')
+  await Axios.patch(`${apiEndpoint}/tweets/${tweetId}`, JSON.stringify(updatedTweet), {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
@@ -45,9 +46,9 @@ export async function patchTweet(
 
 export async function deleteTweet(
   idToken: string,
-  todoId: string
+  tweetId: string
 ): Promise<void> {
-  await Axios.delete(`${apiEndpoint}/tweets/${todoId}`, {
+  await Axios.delete(`${apiEndpoint}/tweets/${tweetId}`, {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
@@ -57,9 +58,9 @@ export async function deleteTweet(
 
 export async function getUploadUrl(
   idToken: string,
-  todoId: string
+  tweetId: string
 ): Promise<string> {
-  const response = await Axios.post(`${apiEndpoint}/tweets/${todoId}/attachment`, '', {
+  const response = await Axios.post(`${apiEndpoint}/tweets/${tweetId}/attachment`, '', {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
